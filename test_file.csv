@@ -1,0 +1,2 @@
+question_id,category,evalution_type,expected_output,prompt
+Q001,knowledge,contains,Paris,"""What is the capital of France? return as JSON"""
