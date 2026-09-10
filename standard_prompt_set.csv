@@ -1,0 +1,4 @@
+question_id,category,evalution_type,expected_output,prompt
+,,,,Hello just warmup return as JSON
+Q001,knowledge,contains,Paris,What is the capital of France? return as JSON
+Q002,Math,exact ,42,what is 40 + 2? return as JSON
