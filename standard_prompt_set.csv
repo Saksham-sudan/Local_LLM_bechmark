@@ -1,4 +1,7 @@
 question_id,category,evalution_type,expected_output,prompt
-,,,,Hello just warmup return as JSON
-Q001,knowledge,contains,Paris,What is the capital of France? return as JSON
-Q002,Math,exact ,42,what is 40 + 2? return as JSON
+,warmup,,,Hello.
+Q001,knowledge,contains,paris,What is the capital of France?
+Q002,math,exact,42,what is 40 + 2?
+Q003,logic,contains,375,"A bakery sold 60 muffins on Saturday and 90 on Sunday, at $2.50 each. How much money did it make over the weekend?"
+Q004,coding,contains,triangle_area,Write a Python function that takes the length of a side 'a' and height 'h' and returns the area of a triangle. Name the function triangle_area.
+Q005,data_extraction,contains,INV-88342,Extract the invoice number from the following email: "Hi Accounting please process payment for the attached invoice from TechCorp. The total is $1250.00 for the software licenses. Invoice #INV-88342 was issued on October 14th. Thanks."
