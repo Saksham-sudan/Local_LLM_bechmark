@@ -1,9 +1,9 @@
-import csv 
 import time
 import threading
+import pandas as pd
 from pynvml import *
 from ollama import chat
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 class schema_structure(BaseModel):
   thought_process: str
@@ -33,7 +33,7 @@ def vram_lookup():
 def ans_qual_eval(model_ans, expected_ans, eval_type):
    s_model_ans = model_ans.strip().lower()
    s_expected_ans = expected_ans.strip().lower()
-   if eval_type == "exact":
+   if eval_type == "exact_match":
        if s_model_ans == s_expected_ans:
             return True
        else:
@@ -45,49 +45,53 @@ def ans_qual_eval(model_ans, expected_ans, eval_type):
             return False
       
 def benchmark(model_name, prompt_set):
-    with open(prompt_set, newline='') as csv_file:
-       csv_reader = csv.DictReader(csv_file)
-       for row in csv_reader:
-          with data_lock:
-             shared_data['vram_used'] = 0
-          response = chat(
-             model=model_name,
-             messages=[{"role": "system", "content": "You are a concise reasoning engine. Think step-by-step"},
-                       {"role": "user", "content": row['prompt']}],
-             stream=False,
-             format= schema_structure.model_json_schema(),
-             options= {'temperature': 0},
-             )
-          
-          if row["category"] == "warmup":
-             continue
+   prompt_data = pd.read_csv(prompt_set, dtype=str)
+   for row in prompt_data.itertuples(index=True):
 
-          response_msg = schema_structure.model_validate_json(response.message.content)
-          ttft_ms = response.prompt_eval_duration/1e6
-          dec_token_count = response.eval_count
-          dec_time_taken_sec = response.eval_duration/1e9
-          tps_sec = dec_token_count/dec_time_taken_sec
-          total_response_latency_sec = response.total_duration/1e9
-          with data_lock:
-             vram_usuage_mb = shared_data['vram_used'] / (1024**2)
-          category = row["category"]
+      with data_lock:
+         shared_data['vram_used'] = 0
 
-          print("------------------------------------------------")
-          print(row['prompt'])
-          print(f"Thought Process: {response_msg.thought_process}")
-          print(f"answer: {response_msg.answer}")
-          print(ans_qual_eval(response_msg.answer, row["expected_output"], row["evalution_type"]))
-          print(f"TTFT in Ms: {ttft_ms}")
-          print(f"TPS in /sec: {tps_sec}")
-          print(f"Total Response Latency in Sec: {total_response_latency_sec}")
-          print(f"Vram Usuage in Mb: {vram_usuage_mb}")
+      print(f"Processing {row.question_id}: {row.category}...")
+      response = chat(
+         model=model_name,
+         messages=[{"role": "system", "content": "You are a concise reasoning engine. Think step-by-step"}, {"role": "user", "content": row.prompt}],
+         stream=False,
+         format= schema_structure.model_json_schema(),
+         options= {'temperature': 0, 'num_predict': 1024},
+         )
 
-          total = score_card[category]["Total"]
-          passed = score_card[category]["passed"]
-          total += 1
-          if ans_qual_eval(response_msg.answer, row["expected_output"], row["evalution_type"]):
-            passed += 1
-          print(f"quality: {(passed / total ) * 100}")
+      if row.category == "warmup":
+         continue
+
+      try:
+         response_msg = schema_structure.model_validate_json(response.message.content)
+      except ValidationError as e:
+         print("Prompt failed")
+         continue
+      ttft_ms = response.prompt_eval_duration/1e6
+      dec_token_count = response.eval_count
+      dec_time_taken_sec = response.eval_duration/1e9
+      tps_sec = dec_token_count/dec_time_taken_sec if dec_time_taken_sec > 0 else 0.0
+      total_response_latency_sec = response.total_duration/1e9
+      with data_lock:
+         vram_usuage_mb = shared_data['vram_used'] / (1024**2)
+      category = row.category
+
+      print("------------------------------------------------")
+      print(row.prompt)
+      print(f"Thought Process: {response_msg.thought_process}")
+      print(f"answer: {response_msg.answer}")
+      print(ans_qual_eval(response_msg.answer, row.expected_output, row.evaluation_type))
+      print(f"TTFT in Ms: {ttft_ms}")
+      print(f"TPS in /sec: {tps_sec}")
+      print(f"Total Response Latency in Sec: {total_response_latency_sec}")
+      print(f"Vram Usuage in Mb: {vram_usuage_mb}")
+
+      score_card[category]["Total"] +=1
+      if ans_qual_eval(response_msg.answer, row.expected_output, row.evaluation_type):
+         score_card[category]["passed"] +=1
+      quality = (score_card[category]["passed"] / score_card[category]["Total"] ) * 100
+      print(f"quality: {quality}")
 
 
 if __name__ == "__main__":
