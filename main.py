@@ -2,6 +2,7 @@ import time
 import threading
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 from pynvml import *
 from ollama import chat
 from pydantic import BaseModel, ValidationError, Field
@@ -69,7 +70,6 @@ def benchmark(model_name, prompt_set):
       dec_time_taken_sec = response.eval_duration/1e9
       tps_sec = dec_token_count/dec_time_taken_sec if dec_time_taken_sec > 0 else 0.0
       total_response_latency_sec = response.total_duration/1e9
-      category = row.category
       is_correct = ans_qual_eval(response_msg.answer, response_msg.thought_process, row.expected_output)
 
       with data_lock:
@@ -87,11 +87,13 @@ def benchmark(model_name, prompt_set):
       result.append({
          "quesstion_id": row.question_id,
          "category": row.category,
-         "passed": is_correct
+         "passed": 1 if is_correct else 0,
+         "prompt_length": len(row.prompt),
+         "ttft_ms": ttft_ms
       })
 
       data_out = pd.DataFrame(result)
-      data_out.to_csv("test.csv", index = False)
+      data_out.to_csv("benchmark.csv", index = False)
 
 if __name__ == "__main__":
    nvmlInit()
@@ -99,7 +101,7 @@ if __name__ == "__main__":
    monitor_thread.start()
 
    try:
-      benchmark("llama3.2:3b", "prompt_set.csv")
+      benchmark("llama3.2:3b", "test_set.csv")
    finally:
       stop_event.set()
       monitor_thread.join()

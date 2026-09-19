@@ -1,27 +1,61 @@
-question_id,category,expected_output,prompt,,
-Q000,warmup,,Hello.,,
-Q001,logic,5,"A farmer has 10 cows. All but 5 die. How many cows are left?",,
-Q002,logic,200,"If a machine takes 10 minutes to make 5 widgets, how many widgets can it make in 400 minutes?",
-Q003,logic,48,"There are 3 boxes. Box A has 12 apples. Box B has twice as many as Box A. Box C has half as many as Box B. How many apples are there in total?",,
-Q004,logic,28,"A snail falls into a 30-foot well. Every day it climbs up 3 feet, but at night it slips back 2 feet. How many days will it take for the snail to reach the top?",
-Q005,logic,30,"If I am 10 years old and my brother is half my age, how old will my brother be when I am 35?",
-Q006,coding,def reverse_string,"Write a Python function named 'reverse_string' that takes a string as input and returns the reversed string.",,
-Q007,coding,def count_vowels,"Write a Python function named 'count_vowels' that takes a string and returns the number of vowels in it.",,
-Q008,coding,def is_palindrome,"Write a Python function named 'is_palindrome' that checks if a given word is a palindrome. It should return True or False.",,
-Q009,coding,def find_max,"Write a Python function named 'find_max' that takes a list of integers and returns the largest number.",,
-Q010,coding,def calculate_factorial,"Write a Python function named 'calculate_factorial' that takes a non-negative integer and returns its factorial using a loop.",,
-Q011,math,120,"Calculate the area of a rectangle with a width of 10 meters and a length of 12 meters.",,
-Q012,math,45,"If a shirt costs $60 and is on sale for 25% off, what is the final price?",
-Q013,math,144,"What is 12 multiplied by 12?",,
-Q014,math,60,"A train travels at 120 miles per hour. How many miles will it travel in 30 minutes?",,
-Q015,math,8,"Solve for x: 3x + 6 = 30.",,
-Q016,knowledge,Alexander Fleming,"Who discovered penicillin?",,
-Q017,knowledge,Jupiter,"What is the largest planet in our solar system?",,
-Q018,knowledge,1969,"In what year did the first human step on the moon?",,
-Q019,knowledge,Harper Lee,"Who wrote the novel 'To Kill a Mockingbird'?",,
-Q020,knowledge,Carbon,"What element does 'C' represent on the periodic table?",,
-Q021,data_extraction,TRX-9982,"Extract the transaction ID from this message: 'Your payment of $45.00 was successful. Reference code: TRX-9982. Thank you for your business.'",,
-Q022,data_extraction,"October 14, 2023","Extract the delivery date from this text: 'Your package shipped via Fedex will arrive on October 14, 2023 by 8:00 PM.'"
-Q023,data_extraction,555-0198,"Find the phone number in this paragraph: 'If you have any questions regarding your recent stay at the Grand Hotel, please contact the front desk directly at 555-0198 during normal business hours.'",
-Q024,data_extraction,Sarah Jenkins,"Identify the project manager named in this email: 'We are kicking off the alpha phase next week. Sarah Jenkins will be leading the daily standups as the project manager. Please send her your updates.'",,
-Q025,data_extraction,192.168.1.105,"Extract the IP address from this server log: 'Connection refused from host on port 8080. Client IP: 192.168.1.105. Check firewall rules.'",,
+question_id,category,prompt,expected_output
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+W00,warmup,"hello",
+L01,logic,"A farmer has 10 cows. All but 5 die. How many cows are left?",5
+L02,logic,"If all Bleeps are Bloops and all Bloops are Blips, are all Bleeps definitely Blips? Answer Yes or No.",Yes
+L03,logic,"Alice, Bob, and Charlie sit in a line. Alice is not next to Bob. Charlie is on the far right. Who is sitting on the far left?",Bob
+L04,logic,"Three boxes are labeled 'Apples', 'Oranges', and 'Mixed'. Every box is labeled incorrectly. You pick one fruit from the box labeled 'Mixed' and it is an Apple. What fruit is actually in the box labeled 'Apples'?",Oranges
+L05,logic,"Four friends (Alex, Blake, Casey, Drew) live on four consecutive floors of a four-story building (1 to 4). Alex does not live on floor 1 or floor 4. Blake lives on a higher floor than Drew. Casey lives two floors above Drew. Which floor does Blake live on?",4
+L06,logic,"In a tournament, Team A beat Team B. Team C lost to Team B. Team D beat Team A. Rank the four teams from 1st to 4th place using initials separated by commas.","D, A, B, C"
+L07,logic,"Four cards are placed on a table showing 'A', 'B', '4', and '7'. Each card has a letter on one side and a number on the other. Which card(s) MUST you turn over to test the rule: 'If a card has a vowel on one side, it has an even number on the other'?",A and 7
+L08,logic,"A detective investigates four suspects: Paul, Qadir, Rita, and Sam. The culprit left a red hat at the scene. Paul never wears hats. Qadir was seen wearing a black hat all day. Rita only owns blue and green accessories. Sam was seen running from the scene wearing a red hat. Who is the culprit?",Sam
+L09,logic,"A logistics director must schedule four cargo deliveries (Shipments 1, 2, 3, and 4) across four consecutive time slots (Slot 1, Slot 2, Slot 3, Slot 4). The following operational constraints must all be satisfied simultaneously: 1. Shipment 1 cannot be assigned to Slot 1 or Slot 4. 2. Shipment 3 must be processed immediately after Shipment 2. 3. Shipment 4 cannot be assigned to Slot 3. 4. Shipment 2 must be scheduled in an earlier slot than Shipment 1. Based strictly on these constraints, determine which shipment must be assigned to Slot 1.",Shipment 2
+L10,logic,"An automated warehouse routing robot must navigate a grid-based distribution center according to strict safety rules. The grid locations are labeled A1 through A5. The robot starts at position A1 facing North. Rule 1: Moving Forward advances one grid square in the current direction. Rule 2: Turning Right changes direction clockwise by 90 degrees without changing location. Rule 3: Turning Left changes direction counter-clockwise by 90 degrees without changing location. Rule 4: Reversing changes direction by 180 degrees without changing location. The operator executes the following sequence of commands sequentially: Move Forward, Turn Right, Move Forward, Turn Left, Move Forward, Reverse, Move Forward. Assuming no collisions occur, what is the final grid square location of the robot?",A2
+M01,math,"If a car travels at 60 miles per hour, how many miles will it travel in 3.5 hours?",210
+M02,math,"What is 15% of 240?",36
+M03,math,"A store offers a 20% discount on a $150 jacket. After the discount is applied, a 10% sales tax is calculated on the discounted price. What is the final cost of the jacket in dollars?",132
+M04,math,"A bag contains 4 red balls, 6 blue balls, and 5 green balls. If one ball is drawn at random, what is the probability (as a simplified fraction) that it is NOT blue?",3/5
+M05,math,"A tech startup began Year 1 with an initial capital investment of $50,000. In Year 1, operating expenses were $20,000 and gross revenue was $35,000. In Year 2, gross revenue increased by 50% relative to Year 1 revenue, while operating expenses increased by 25% relative to Year 1 expenses. At the start of Year 3, the startup paid a flat corporate tax of 20% on the total net profit accumulated across Years 1 and 2 combined. What is the remaining total capital balance (initial investment plus net post-tax profits) in dollars at the start of Year 3?",82000
+M06,math,"Solve for x: 3x + 7 = 2x - 5",-12
+M07,math,"A rectangular swimming pool measures 10 meters long, 5 meters wide, and 2 meters deep. If water is pumped into the pool at a constant rate of 5 cubic meters per minute, how many minutes will it take to fill the pool completely?",20
+M08,math,"A bakery bakes batches of cookies and cakes. Each batch of cookies requires 2 cups of flour and 1 cup of sugar. Each batch of cakes requires 3 cups of flour and 2 cups of sugar. The bakery has 20 cups of flour and 12 cups of sugar available. If the bakery makes 4 batches of cakes, what is the maximum number of cookie batches it can make with the remaining flour?",4
+M09,math,"An asset management firm tracks an investment account over a 4-month quarter. In Month 1, the portfolio starts at $100,000 and gains 10%. In Month 2, the portfolio loses 10% of its new total value. In Month 3, the portfolio receives a cash injection of $11,000 and subsequently gains 20% on the entire combined balance. In Month 4, management deducts a flat 5% administrative fee from the total ending balance of Month 3. What is the final value of the investment account in dollars at the end of Month 4?",125400
+M10,math,"A regional agricultural warehouse manages inventory across three separate silos: Silo A, Silo B, and Silo C. Silo A holds 1,200 metric tons of grain with a moisture content of 10%. Silo B holds 1,800 metric tons of grain with a moisture content of 15%. Silo C holds 2,000 metric tons of grain with a moisture content of 20%. The facility manager decides to blend all the grain from Silo A, Silo B, and Silo C into a single primary holding vessel. What is the exact average moisture percentage of the resulting 5,000 metric ton grain blend?",15.8%
+C01,coding,"Write a Python expression that reverses the string variable `s`.",s[::-1]
+C02,coding,"What is the time complexity of searching for a key in a Python dictionary on average? State only the Big-O notation.",O(1)
+C03,coding,"Write a single-line Python lambda function assigned to variable `f` that takes an integer x and returns True if x is even and False if x is odd.",f = lambda x: x % 2 == 0
+C04,coding,"Identify the bug in this Python snippet: `def add_item(item, lst=[]): lst.append(item); return lst`. State the key issue in 5 words or fewer.",Mutable default argument
+C05,coding,"A developer wrote the following Python function to compute the nth Fibonacci number recursively: `def fib(n): if n <= 1: return n; return fib(n-1) + fib(n-2)`. What is the tight worst-case time complexity of this unoptimized recursive implementation? Output strictly the Big-O notation.",O(2^n)
+C06,coding,"What Python built-in function returns both the index and value of items in an iterable during loop iteration?",enumerate
+C07,coding,"Write a Python list comprehension that filters a list of integers `nums` to contain only positive numbers.", [x for x in nums if x > 0]
+C08,coding,"Which Python standard library module should be used to parse command-line flags and arguments passed to a script?",argparse
+C09,coding,"Consider the following Python code snippet intended to format data: `data = [{'name': 'Alice', 'score': 85}, {'name': 'Bob', 'score': 92}]; print(max(data, key=lambda x: x['score'])['name'])`. What exact string output is printed to stdout when this script runs?",Bob
+C10,coding,"Review the following Python class definition for an in-memory Key-Value store with TTL support: `class KVStore: def __init__(self): self.store = {} def set(self, k, v): self.store[k] = v def get(self, k): return self.store.get(k, None)`. Identify the method missing from this implementation that is required to delete a key from the dictionary. Output strictly the name of the built-in dictionary deletion keyword or method.",del
+K01,knowledge,"What chemical element has the atomic number 1?",Hydrogen
+K02,knowledge,"In what year did the Apollo 11 moon landing occur?",1969
+K03,knowledge,"Which biological organelle is known as the powerhouse of the cell?",Mitochondria
+K04,knowledge,"Identify the historic treaty signed in 1648 that ended the Thirty Years' War in Europe.",Peace of Westphalia
+K05,knowledge,"Identify the scientific discovery described: In 1928, Alexander Fleming observed that a mold growing on a Petri dish inhibited the growth of Staphylococcus bacteria. What primary antibiotic drug was derived from this mold?",Penicillin
+K06,knowledge,"What is the capital city of Australia?",Canberra
+K07,knowledge,"Which planet in our solar system has the highest surface temperature?",Venus
+K08,knowledge,"Who authored the 1859 scientific publication 'On the Origin of Species'?",Charles Darwin
+K09,knowledge,"Read the following summary of a physical phenomenon: When light waves pass through a narrow slit or around an obstacle, they bend and spread out, creating fringe patterns of constructive and destructive interference. What single physics term describes this wave behavior?",Diffraction
+K10,knowledge,"Read the historical context: In July 1944, delegates from 44 Allied nations gathered at a hotel in New Hampshire, United States, to establish a framework for post-World War II international financial order. This conference led directly to the creation of the International Monetary Fund (IMF) and the International Bank for Reconstruction and Development (IBRD). What is the common name of this historic international conference?",Bretton Woods Conference
+D01,data_extraction,"Extract the phone number from this text: 'Contact support at support@corp.com or call 555-0199 for assistance.'",555-0199
+D02,data_extraction,"Extract the invoice total amount from this text: 'Invoice #4021 - Status: Paid - Subtotal: $400.00 - Tax: $32.00 - Total Due: $432.00'",$432.00
+D03,data_extraction,"Extract the IP address causing the error from this log: '2026-09-12 10:14:02 [ERROR] Connection timed out while connecting to host 192.168.1.105 on port 8080.'",192.168.1.105
+D04,data_extraction,"Extract the tracking number from this confirmation message: 'Your package has shipped via FedEx! Track your shipment using code FX-987654321-US before Friday.'",FX-987654321-US
+D05,data_extraction,"Extract the patient's primary diagnosis from this clinical note: 'PATIENT: John Doe, AGE: 54. PRESENTING SYMPTOMS: Acute chest pain, shortness of breath. ASSESSMENT: Electrocardiogram indicates acute myocardial infarction. PLAN: Transfer immediately to cardiac care unit.'",acute myocardial infarction
+D06,data_extraction,"Extract the promo code from this email text: 'Use code SAVE20 at checkout to get 20% off your purchase.'",SAVE20
+D07,data_extraction,"Extract the scheduled meeting date from this message: 'The team sync has been moved from Monday to Thursday, October 15th at 2:00 PM EST.'",October 15th
+D08,data_extraction,"Extract the governing legal jurisdiction state from this clause: 'This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any principles of conflicts of law.'",Delaware
+D09,data_extraction,"Extract the exact Q3 Net Revenue value from the following corporate earnings release transcript excerpt: 'ACME Corporation (NASDAQ: ACME) today announced financial results for the third quarter ended September 30. Executive Summary: Total gross billings reached $45,000,000. Cost of goods sold accounted for $12,000,000. Operational expenses totaled $8,500,000. Q3 Net Revenue was recorded at $33,000,000, reflecting a 12% increase year-over-year. Free cash flow stood at $5,200,000 at the end of the reporting period.'","$33,000,000"
+D10,data_extraction,"Extract the exact failing module name from the following server diagnostic stack trace excerpt: '2026-09-19T14:22:01.402Z [SYS_WARN] System memory allocation at 84% capacity. 2026-09-19T14:22:02.115Z [AUTH_SERVICE] Token validation successful for user_id=8921. 2026-09-19T14:22:03.001Z [CRITICAL] Exception in thread main java.lang.NullPointerException at com.app.pipeline.PaymentProcessor.executeTransaction(PaymentProcessor.java:142). Module Failure Source: PaymentProcessor. Script execution terminated abnormally.'",PaymentProcessor
