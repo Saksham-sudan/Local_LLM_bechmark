@@ -21,6 +21,8 @@ stop_event = threading.Event()
 
 result = []
 
+colour_pallet = {'Math': '#8b5cf6', 'Coding': '#10b981', 'Logic': '#334155', 'Knowledge': '#f59e0b', 'Extraction': '#e11d48'}
+
 def vram_lookup():
    while not stop_event.is_set() :
       handle = nvmlDeviceGetHandleByIndex(0)
@@ -73,7 +75,7 @@ def benchmark(model_name, prompt_set):
       is_correct = ans_qual_eval(response_msg.answer, response_msg.thought_process, row.expected_output)
 
       with data_lock:
-         vram_usuage_mb = shared_data['vram_used'] / (1024**2)
+         vram_usage_mb = shared_data['vram_used'] / (1024**2)
 
       print(row.prompt)
       print(f"Thought Process: {response_msg.thought_process}")
@@ -82,18 +84,65 @@ def benchmark(model_name, prompt_set):
       print(f"TTFT in Ms: {ttft_ms}")
       print(f"TPS in /sec: {tps_sec}")
       print(f"Total Response Latency in Sec: {total_response_latency_sec}")
-      print(f"Vram Usuage in Mb: {vram_usuage_mb}")
+      print(f"Vram Usuage in Mb: {vram_usage_mb}")
 
       result.append({
-         "quesstion_id": row.question_id,
-         "category": row.category,
-         "passed": 1 if is_correct else 0,
-         "prompt_length": len(row.prompt),
-         "ttft_ms": ttft_ms
+         "Quesstion_Id": row.question_id,
+         "Category": row.category,
+         "Passed": 1 if is_correct else 0,
+         "Prompt_Length": len(row.prompt),
+         "ttft_ms": ttft_ms,
+         "tps": tps_sec,
+         "Vram_Usage_MB": vram_usage_mb,
+         "Latency_sec": total_response_latency_sec
       })
 
       data_out = pd.DataFrame(result)
       data_out.to_csv("benchmark.csv", index = False)
+
+def bar_plot(data_in, ax):
+    quality = (data_in.groupby('Category')["Passed"].mean()) * 100
+    bar_plot = sns.barplot(x=quality.index, y=quality, palette= colour_pallet, hue=quality.index, legend=False, ax=ax)
+    bar_plot.set(ylabel= "Quality of Response")
+    for cont in bar_plot.containers:
+      bar_plot.bar_label(cont)
+    ax.set_ylim(0,100)
+    ax.set_title("Quality per Category")
+
+def reg_plot(data_in, ax):
+   reg_plot = sns.regplot(x= data_in.Prompt_Length, y= data_in.ttft_ms, ax=ax)
+   reg_plot.set(ylabel = "TTFT in MS", xlabel = "Prompt Length")
+   ax.set_title("TTFT per Prompt Lenght")
+
+def box_plot(data_in, ax):
+   sns.boxplot(x= data_in.Category, y= data_in.tps, palette= colour_pallet, hue=data_in.Category, legend=False, ax=ax)
+   ax.set_title("TPS per Category")
+
+def v_bar_plot(data_in, ax):
+   usage = data_in.groupby('Category')['Vram_Usage_MB'].max()
+   v_bar_plot = sns.barplot(x=usage.index, y=usage,  palette= colour_pallet, hue=usage.index, legend=False, ax=ax)
+   v_bar_plot.set(ylabel = "RAM Usage")
+   ax.set_ylim(0,4096)
+   ax.set_title("RAM usuage per Category")
+
+def l_bar_plot(data_in, ax):
+   l_bar_plot = sns.barplot(x=data_in.Category, y=data_in.Latency_sec, palette= colour_pallet, hue=data_in.Category, legend=False, ax=ax)
+   l_bar_plot.set(ylabel= "Latency in sec")
+   ax.set_title("Total Latency per Category")
+
+def visual_func(in_csv):
+   data_in = pd.read_csv(in_csv)
+   fig, ax = plt.subplots(nrows = 2, ncols = 3, figsize=(15, 10))
+   ax = ax.flatten()
+   bar_plot(data_in, ax[0])
+   reg_plot(data_in, ax[1])
+   box_plot(data_in, ax[2])
+   v_bar_plot(data_in, ax[3])
+   l_bar_plot(data_in, ax[4])
+   ax[5].axis('off')
+   plt.tight_layout()
+   plt.savefig("visuals.png", dpi=300)
+   plt.show()
 
 if __name__ == "__main__":
    nvmlInit()
@@ -101,8 +150,10 @@ if __name__ == "__main__":
    monitor_thread.start()
 
    try:
-      benchmark("llama3.2:3b", "test_set.csv")
+      benchmark("llama3.2:3b", "prompt_set.csv")
    finally:
       stop_event.set()
       monitor_thread.join()
       nvmlShutdown()
+      print("Copy bechmark.csv and visual.png to another folder before running the script again")
+      visual_func("benchmark.csv")
