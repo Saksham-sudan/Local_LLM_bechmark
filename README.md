@@ -75,5 +75,6 @@ After running `main.py`, make sure to copy `benchmark.csv` and `visuals.png` int
 ## FUTURE SCOPE
 - Retry Mechanism
 - Better Visuals
+- Web UI
 
 # THANK YOU
