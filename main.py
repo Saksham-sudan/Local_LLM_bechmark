@@ -104,8 +104,6 @@ def bar_plot(data_in, ax):
     quality = (data_in.groupby('Category')["Passed"].mean()) * 100
     bar_plot = sns.barplot(x=quality.index, y=quality, palette= colour_pallet, hue=quality.index, legend=False, ax=ax)
     bar_plot.set(ylabel= "Quality of Response")
-    for cont in bar_plot.containers:
-      bar_plot.bar_label(cont)
     ax.set_ylim(0,100)
     ax.set_title("Quality per Category")
 
@@ -145,15 +143,15 @@ def visual_func(in_csv):
    plt.show()
 
 if __name__ == "__main__":
-   nvmlInit()
-   monitor_thread = threading.Thread(target=vram_lookup, daemon=True)
-   monitor_thread.start()
+   #nvmlInit()
+   #monitor_thread = threading.Thread(target=vram_lookup, daemon=True)
+   #monitor_thread.start()
 
-   try:
-      benchmark("llama3.2:3b", "prompt_set.csv")
-   finally:
-      stop_event.set()
-      monitor_thread.join()
-      nvmlShutdown()
-      print("Copy bechmark.csv and visual.png to another folder before running the script again")
-      visual_func("benchmark.csv")
+   #try:
+      #benchmark("qwen2.5:3b", "prompt_set.csv")
+   #finally:
+      #stop_event.set()
+      #monitor_thread.join()
+      #nvmlShutdown()
+      #print("Copy bechmark.csv and visual.png to another folder before running the script again")
+   visual_func("benchmark.csv")
