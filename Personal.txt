@@ -1,0 +1,82 @@
+-The Serving/Inference Layer
+--an engine to load the model weights into your local memory/VRAM and handle the actual token generation.
+--For this project I am going with Ollama
+-- Ollama runs as an background Daemon and by default as REST API on local server: http://localhost:11434/
+
+=extra work, my laptop is shit and cannot handle the workload fuck this shit.
+
+=OK I'll put in the extra work. This shit sucks ass.
+
+-Quantization is a model optimization technique that reduces the precision of the numerical values (weights and activations) used in an AI or deep learning model. It changes high-precision data types like 32-bit floating-point numbers (FP32) into lower-precision formats like 8-bit integers (INT8) or 4-bit integers (INT4), shrinking file sizes and speeding up computation.
+
+-Models Used:
+--llama3.2:3b.
+--phi4-mini:3.8b.
+
+=For the first model I went with llama 3.2 (3b) with Q4 quantization due to the edge case scenario of my system.
+
+-go to ollama website and download the latest version.
+-run ollama into your powershell.
+-this will initialize ollama in your system.
+- exit and run ollama run model_name.
+-this will install the model.
+
+-The Orchestration Layer
+-- A python script will be used as the orchestration Layer.
+
+-The script loop will be:
+--Standardized Prompts Test Set --->  Schema Enforcement using Pydantic ---> Logging Measurements.
+
+=alright first step first: how to write python scripts.
+==done.
+
+-The Standardized Prompts test Set will follow this format:
+-- question_id, category, evalution_type, expected_output, prompt.
+-- the model should be provided with a system prompt telling it to be concise and accurate.
+
+-The test set will be loaded into the script via pandas.
+
+-Pydantic is kept to enforce a strict schema output despite costing some model performance.
+
+-The Pydantic Schema will be formatted like this:
+-- thought_process: str (to simulate chain of thought) also works as to stable token generation.
+-- answer: str (a data type which wroks with all types of answers).
+-- the schema will be passed as a JSON to the inference engine.
+
+
+=pydantic basic code execution is done next is ollama response mapping and evaluation designing.
+
+-The model temperature will be 0 for the grading to be deterministic.
+-Token allocation per prompt is 1024.
+
+=got the telemetry from responses next is to set up grading logic.
+
+-Grading Layer
+
+-The Metrics to grade will be:
+--TTTFT(Total Time To First Token) prefill phase: This metric measures the total time it took for the model pre token generation computing measures in ms.
+--TPS(Time Per Token) decode phase: This metric tells us how many token were used by the model per second in decode phase.
+--Total Response Latency: This metric tells us about the total time it took for the request to be processed, decoded and sent back with answer including all the overhead measured in seconds.
+--VRam Usage: This metric tells us how much memory each prompt took for the model to process.
+--ans_qual: This metric checks the quality of each answer.
+
+=Next is to set up a VRAM monitor.
+=Still setting up Vram_lookup
+=Ok got the Vram lookup up and running everything looks good
+=Grading layer done. finally!!!!!!
+=Next is visualization.
+=changed CSV module --> pandas
+=made a proper dummy test set, next is to look into how the model behaves for each type of prompt
+=model behaviour optimization set next is actually working on graphs, it's so tiering.
+
+-Visualization layer
+--category/quality barplot: tells how what % of answer given by the model are accurate per category.
+--prompt length/ttft regular plot : shows the relationship between prompt length and ttft(prefil phase).
+--category/tps boxplot: This metric tells us the relation and extremes of tps and category
+--category/Vram usage: tells us Vram used per category(MAX)
+--category/latency: teels us the AVG latency per category
+
+-Future Scope
+--retry mechanism 
+--visualization improvments
+--few structural improvments 
