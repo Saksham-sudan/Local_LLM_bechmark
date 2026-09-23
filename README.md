@@ -72,4 +72,8 @@ The benchmark is divided into 5 categories:
 ## IMPORTANT
 After running `main.py`, make sure to copy `benchmark.csv` and `visuals.png` into another folder, as they will be overwritten on the next run of the script.
 
+## FUTURE SCOPE
+- Retry Mechanism
+- Better Visuals
+
 # THANK YOU
