@@ -143,15 +143,15 @@ def visual_func(in_csv):
    plt.show()
 
 if __name__ == "__main__":
-   #nvmlInit()
-   #monitor_thread = threading.Thread(target=vram_lookup, daemon=True)
-   #monitor_thread.start()
+   nvmlInit()
+   monitor_thread = threading.Thread(target=vram_lookup, daemon=True)
+   monitor_thread.start()
 
-   #try:
-      #benchmark("qwen2.5:3b", "prompt_set.csv")
-   #finally:
-      #stop_event.set()
-      #monitor_thread.join()
-      #nvmlShutdown()
-      #print("Copy bechmark.csv and visual.png to another folder before running the script again")
-   visual_func("benchmark.csv")
+   try:
+      benchmark("your_model_name", "prompt_set.csv")
+   finally:
+      stop_event.set()
+      monitor_thread.join()
+      nvmlShutdown()
+      print("Copy bechmark.csv and visual.png to another folder before running the script again")
+      visual_func("benchmark.csv")
